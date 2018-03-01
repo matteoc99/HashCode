@@ -11,11 +11,11 @@ public class Ride {
 
     Point from;
     Point to;
-    int start;
-    int finish;
+    public int start;
+    public int finish;
 
-    static int hauptIndex=0;
-    int index =-1;
+    public static int hauptIndex=0;
+    public int index =-1;
 
 
     boolean vergeben =false;
@@ -90,4 +90,5 @@ public class Ride {
     public void setIndex(int index) {
         this.index = index;
     }
+
 }
