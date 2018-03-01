@@ -15,7 +15,7 @@ public class Ride {
     int start;
     int finish;
 
-    public static AtomicInteger indexer = new AtomicInteger(0);
+    static int hauptIndex=0;
     int index =-1;
 
 
@@ -23,7 +23,9 @@ public class Ride {
 
 
     public Ride() {
-        index = indexer.getAndIncrement();
+
+        index = hauptIndex;
+        hauptIndex++;
     }
 
     public Ride(Point from, Point to, int start, int finish) {
@@ -80,5 +82,13 @@ public class Ride {
     }
     public int getFahrtTime() {
         return distanceBetweenTwoPoint(getFrom(),getTo());
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

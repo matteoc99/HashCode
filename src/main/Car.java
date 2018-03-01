@@ -8,7 +8,7 @@ public class Car {
     public Point location= new Point();
     public int timer;
     public ArrayList<Ride> rides;
-
+    boolean full= false;
 
     public Car() {
         location.x = 0;
@@ -58,5 +58,13 @@ public class Car {
             ret.append(" ").append(ride.index);
         }
         return ret.toString();
+    }
+
+    public boolean isFull() {
+        return full;
+    }
+
+    public void setFull(boolean full) {
+        this.full = full;
     }
 }

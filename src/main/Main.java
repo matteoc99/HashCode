@@ -22,36 +22,35 @@ public class Main {
     public static int T = -1;  //number of steps in the simulation (1 ≤ T ≤ 10#9 )
 
     public static ArrayList<Ride> rides;
-    public static ArrayList<Ride> freeRides;
 
     public static void main(String[] args) {
 
         String[] names = {"a_example", "b_should_be_easy", "c_no_hurry", "d_metropolis", "e_high_bonus"};
 
-        names = new String[]{"c_no_hurry"};
         for (String string : names) {
+            Ride.hauptIndex = 0;
 
             rides = readInFile(string);
-            freeRides = readInFile(string);
 
-            System.out.println(rides.size()+" "+ F);
+            System.out.println(R+" "+C+" "+F+" "+N+" "+B+" "+T);
+
+            check(rides);
 
             ArrayList<Car> cars = new ArrayList<>();
             for (int i = 0; i < F; i++) {
                 cars.add(new Car());
             }
-            for (Car car : cars) {
-                boolean hasRide = true;
-                while (hasRide) {
-                    Ride best = getNextBestRide(car);
-                    if (best == null) {
-                        hasRide = false;
-                    } else {
-                        freeRides.remove(best);
-                    }
-                }
-            }
+
+            getNextBestRide(cars);
+
             writeArray(cars,string);
+        }
+    }
+
+    private static void check(ArrayList<Ride> rides) {
+        for (int i = 0; i < rides.size(); i++) {
+            if(rides.get(i).getIndex()>N)
+                System.out.println("ALARM");
         }
     }
 
@@ -68,25 +67,65 @@ public class Main {
     }
 
 
-    public static Ride getNextBestRide(Car car) {
-        Ride best = null;
-        int besteZeit = Integer.MAX_VALUE;
-        for (int i = 0; i < freeRides.size(); i++) {
-            Ride ride = freeRides.get(i);
-            int leereFahrt = car.distanceToPoint(ride.getFrom());
-            int waitTime = ride.start - leereFahrt < 0 ? 0 : ride.start - leereFahrt;
-            int fahrtLength = ride.getFahrtTime();
-            int total = waitTime + fahrtLength + leereFahrt;
-            if (total + car.getTimer() < besteZeit && total + car.getTimer() < T && total + car.getTimer() < ride.finish) {
-                best = ride;
-                besteZeit = total + car.getTimer();
+    public static void getNextBestRide(ArrayList<Car> car) {
+
+        boolean gooo=true;
+        while (gooo){
+            int besteZeit = Integer.MAX_VALUE;
+            ArrayList<Car> notDoneCars= getNotDoneCars(car);
+            Ride bestRide=null;
+            Car bestCar=null;
+            gooo=false;
+            for (Car car1: notDoneCars) {
+                gooo=true;
+                Ride localBestRide=null;
+                int localBesteZeit = Integer.MAX_VALUE;
+                ArrayList<Ride> free = getFreeRides();
+                for (int i = 0; i < free.size(); i++) {
+                    Ride ride = free.get(i);
+                    int leereFahrt = car1.distanceToPoint(ride.getFrom());
+                    int waitTime = ride.start - (car1.getTimer()+leereFahrt) < 0 ? 0 : ride.start - (car1.getTimer()+leereFahrt) ;
+                    int fahrtLength = ride.getFahrtTime();
+                    int total = waitTime + fahrtLength + leereFahrt;
+                    if (total + car1.getTimer() < besteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
+                        bestRide = ride;
+                        besteZeit = total + car1.getTimer();
+                        bestCar = car1;
+                    }
+                    //better then local?
+                    if (total + car1.getTimer() < localBesteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
+                        localBestRide = ride;
+                        besteZeit = total + car1.getTimer();
+                    }
+                    if(localBestRide==null)
+                        car1.setFull(true);
+                }
+
+            }
+            if (bestRide != null) {
+                bestCar.setTimer(besteZeit);
+                bestCar.rides.add(bestRide);
+                bestCar.setLocation(bestRide.getTo());
+                rides.get(rides.indexOf(bestRide)).setVergeben(true);
+            }else {
+                gooo= false;
             }
         }
-        if (best != null) {
-            car.setTimer(besteZeit);
-            car.rides.add(best);
+
+
+
+    }
+
+    private static ArrayList<Car> getNotDoneCars(ArrayList<Car> car) {
+        ArrayList<Car> here = new ArrayList<>();
+        for (Car car1:
+                car) {
+            if(!car1.isFull()){
+                here.add(car1);
+            }
         }
-        return best;
+        return here;
+
     }
 
 
@@ -118,18 +157,17 @@ public class Main {
 
             line = br.readLine();
             int counter = 0;
-            while (line != null || counter>=R) {
+            while (line != null && counter<N) {
                 counter++;
-                int xFrom = Integer.parseInt(line.substring(0, line.indexOf(' ')));
-                line = line.substring(line.indexOf(' ') + 1, line.length());
-
-                int yFrom = Integer.parseInt(line.substring(0, line.indexOf(' ')));
-                line = line.substring(line.indexOf(' ') + 1, line.length());
+                int xFrom = xFrom = Integer.parseInt(line.substring(0, line.indexOf(' ')));
+                    line = line.substring(line.indexOf(' ') + 1, line.length());
 
 
                 int xTo = Integer.parseInt(line.substring(0, line.indexOf(' ')));
                 line = line.substring(line.indexOf(' ') + 1, line.length());
 
+                int yFrom = Integer.parseInt(line.substring(0, line.indexOf(' ')));
+                line = line.substring(line.indexOf(' ') + 1, line.length());
 
                 int yTo = Integer.parseInt(line.substring(0, line.indexOf(' ')));
                 line = line.substring(line.indexOf(' ') + 1, line.length());
@@ -148,6 +186,18 @@ public class Main {
             e.printStackTrace();
         }
         return ret;
+    }
+
+
+    public static ArrayList<Ride> getFreeRides(){
+        ArrayList<Ride> free = new ArrayList<>();
+        for (Ride ride :
+                rides) {
+            if(!ride.isVergeben()){
+                free.add(ride);
+            }
+        }
+        return free;
     }
 
 }
