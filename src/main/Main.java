@@ -1,4 +1,4 @@
-package backUp;
+package main;
 
 import java.awt.*;
 import java.io.BufferedReader;
