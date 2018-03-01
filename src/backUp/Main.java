@@ -1,4 +1,4 @@
-package main;
+package backUp;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Matteo Cosi & Markus Pobitzer
@@ -62,7 +61,7 @@ public class Main {
         }
     }
 
-    public static void writeArray(ArrayList<Car> cars,String filename){
+    public static void writeArray(ArrayList<Car> cars, String filename){
         String name = System.getProperty("user.dir") + "/src/files/"+filename+".out";
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(name))){
             for (Car car : cars) {

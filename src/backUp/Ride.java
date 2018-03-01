@@ -1,7 +1,6 @@
-package main;
+package backUp;
 
 import java.awt.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Matteo Cosi
