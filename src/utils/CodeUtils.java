@@ -3,6 +3,7 @@ package utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.io.FileWriter;
 import java.util.Arrays;
 
@@ -71,4 +72,50 @@ public class CodeUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * quicksort
+     * @param arr the array
+     * @param low 0
+     * @param high arr.length -1
+     */
+    public static void quickSort(int[] arr, int low, int high) {
+        if (arr == null || arr.length == 0)
+            return;
+
+        if (low >= high)
+            return;
+
+        // pick the pivot
+        int middle = low + (high - low) / 2;
+        int pivot = arr[middle];
+
+        // make left < pivot and right > pivot
+        int i = low, j = high;
+        while (i <= j) {
+            while (arr[i] < pivot) {
+                i++;
+            }
+
+            while (arr[j] > pivot) {
+                j--;
+            }
+
+            if (i <= j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+                j--;
+            }
+        }
+
+        // recursively sort two sub parts
+        if (low < j)
+            quickSort(arr, low, j);
+
+        if (high > i)
+            quickSort(arr, i, high);
+    }
+
 }
