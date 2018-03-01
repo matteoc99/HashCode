@@ -40,9 +40,17 @@ public class Main {
             for (int i = 0; i < F; i++) {
                 cars.add(new Car());
             }
-
-            getNextBestRide(cars);
-
+            for (Car car : cars) {
+                boolean hasRide = true;
+                while (hasRide) {
+                    Ride best = getNextBestRide(car);
+                    if (best == null) {
+                        hasRide = false;
+                    } else {
+                        rides.get(rides.indexOf(best)).setVergeben(true);
+                    }
+                }
+            }
             writeArray(cars,string);
         }
     }
@@ -67,65 +75,27 @@ public class Main {
     }
 
 
-    public static void getNextBestRide(ArrayList<Car> car) {
-
-        boolean gooo=true;
-        while (gooo){
-            int besteZeit = Integer.MAX_VALUE;
-            ArrayList<Car> notDoneCars= getNotDoneCars(car);
-            Ride bestRide=null;
-            Car bestCar=null;
-            gooo=false;
-            for (Car car1: notDoneCars) {
-                gooo=true;
-                Ride localBestRide=null;
-                int localBesteZeit = Integer.MAX_VALUE;
-                ArrayList<Ride> free = getFreeRides();
-                for (int i = 0; i < free.size(); i++) {
-                    Ride ride = free.get(i);
-                    int leereFahrt = car1.distanceToPoint(ride.getFrom());
-                    int waitTime = ride.start - (car1.getTimer()+leereFahrt) < 0 ? 0 : ride.start - (car1.getTimer()+leereFahrt) ;
-                    int fahrtLength = ride.getFahrtTime();
-                    int total = waitTime + fahrtLength + leereFahrt;
-                    if (total + car1.getTimer() < besteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
-                        bestRide = ride;
-                        besteZeit = total + car1.getTimer();
-                        bestCar = car1;
-                    }
-                    //better then local?
-                    if (total + car1.getTimer() < localBesteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
-                        localBestRide = ride;
-                        besteZeit = total + car1.getTimer();
-                    }
-                    if(localBestRide==null)
-                        car1.setFull(true);
-                }
-
-            }
-            if (bestRide != null) {
-                bestCar.setTimer(besteZeit);
-                bestCar.rides.add(bestRide);
-                bestCar.setLocation(bestRide.getTo());
-                rides.get(rides.indexOf(bestRide)).setVergeben(true);
-            }else {
-                gooo= false;
+    public static Ride getNextBestRide(Car car) {
+        Ride best = null;
+        int besteZeit = Integer.MAX_VALUE;
+        ArrayList<Ride> free = getFreeRides();
+        for (int i = 0; i < free.size(); i++) {
+            Ride ride = free.get(i);
+            int leereFahrt = car.distanceToPoint(ride.getFrom());
+            int waitTime = ride.start - (car.getTimer()+leereFahrt) < 0 ? 0 : (car.getTimer()+leereFahrt);
+            int fahrtLength = ride.getFahrtTime();
+            int total = waitTime + fahrtLength + leereFahrt;
+            if (total + car.getTimer() < besteZeit && total + car.getTimer() < T && total + car.getTimer() < ride.finish) {
+                best = ride;
+                besteZeit = total + car.getTimer();
             }
         }
-
-
-
-    }
-
-    private static ArrayList<Car> getNotDoneCars(ArrayList<Car> car) {
-        ArrayList<Car> here = new ArrayList<>();
-        for (Car car1:
-                car) {
-            if(!car1.isFull()){
-                here.add(car1);
-            }
+        if (best != null) {
+            car.setTimer(besteZeit);
+            car.rides.add(best);
+            car.setLocation(best.getTo());
         }
-        return here;
-
+        return best;
     }
 
 
