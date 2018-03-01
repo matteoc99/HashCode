@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Matteo Cosi
@@ -14,11 +15,19 @@ public class Ride {
     int start;
     int finish;
 
+    public static AtomicInteger indexer = new AtomicInteger(0);
+    int index =-1;
+
+
+    boolean vergeben =false;
+
 
     public Ride() {
+        index = indexer.getAndIncrement();
     }
 
     public Ride(Point from, Point to, int start, int finish) {
+        this();
         this.from = from;
         this.to = to;
         this.start = start;
@@ -55,5 +64,21 @@ public class Ride {
 
     public void setFinish(int finish) {
         this.finish = finish;
+    }
+
+    public boolean isVergeben() {
+        return vergeben;
+    }
+
+    public void setVergeben(boolean vergeben) {
+        this.vergeben = vergeben;
+    }
+
+
+    public int distanceBetweenTwoPoint(Point location,Point point){
+        return  Math.abs(location.x-point.x)+ Math.abs(location.y+point.y);
+    }
+    public int getFahrtTime() {
+        return distanceBetweenTwoPoint(getFrom(),getTo());
     }
 }
