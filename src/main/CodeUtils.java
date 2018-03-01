@@ -1,11 +1,10 @@
-package utils;
+package main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.io.FileWriter;
-import java.util.Arrays;
 
 /**
  * @author Matteo Cosi
@@ -34,33 +33,6 @@ public class CodeUtils {
         return ret;
     }
 
-    public static char[][] readInArray(String file){
-        char[][] ret = null;
-        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line = br.readLine();
-
-            int lines = Integer.parseInt(line.substring(0, 1));
-            int zeichn = Integer.parseInt(line.substring(2, 3));
-            int zusatz1 = Integer.parseInt(line.substring(4, 5));
-            int zusatz2 = Integer.parseInt(line.substring(6, 7));
-
-            ret = new char[lines][zeichn];
-            int i = 0;
-            line = br.readLine();
-            while (line != null) {
-                for (int j = 0; j < zeichn; j++){
-                    char c = line.charAt(j);
-                    ret[i][j] = c;
-                }
-                i++;
-                System.out.println("\n");
-                line = br.readLine();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return (ret != null)? ret : null;
-    }
 
     public static void writeArray(char[][] data, String filename){
         String name = System.getProperty("user.dir") + "/src/files/"+filename;
