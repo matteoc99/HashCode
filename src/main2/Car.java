@@ -1,7 +1,5 @@
 package main2;
 
-import main.Ride;
-
 import java.awt.*;
 import java.util.ArrayList;
 

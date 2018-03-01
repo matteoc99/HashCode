@@ -1,8 +1,5 @@
 package main2;
 
-import main.Car;
-import main.Ride;
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,9 +35,9 @@ public class    Main {
 
             check(rides);
 
-            ArrayList<main.Car> cars = new ArrayList<>();
+            ArrayList<Car> cars = new ArrayList<>();
             for (int i = 0; i < F; i++) {
-                cars.add(new main.Car());
+                cars.add(new Car());
             }
 
             getNextBestRide(cars);
@@ -56,10 +53,10 @@ public class    Main {
         }
     }
 
-    public static void writeArray(ArrayList<main.Car> cars, String filename){
+    public static void writeArray(ArrayList<Car> cars, String filename){
         String name = System.getProperty("user.dir") + "/src/files/"+filename+".out";
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(name))){
-            for (main.Car car : cars) {
+            for (Car car : cars) {
                 bw.write(car.rides.size() + car.ridesToString()+"\n");
             }
         }catch(Exception e){
@@ -69,16 +66,16 @@ public class    Main {
     }
 
 
-    public static void getNextBestRide(ArrayList<main.Car> car) {
+    public static void getNextBestRide(ArrayList<Car> car) {
 
         boolean gooo=true;
         while (gooo){
             int besteZeit = Integer.MAX_VALUE;
-            ArrayList<main.Car> notDoneCars= getNotDoneCars(car);
+            ArrayList<Car> notDoneCars= getNotDoneCars(car);
             Ride bestRide=null;
-            main.Car bestCar=null;
+            Car bestCar=null;
             gooo=false;
-            for (main.Car car1: notDoneCars) {
+            for (Car car1: notDoneCars) {
                 gooo=true;
                 Ride localBestRide=null;
                 int localBesteZeit = Integer.MAX_VALUE;
@@ -118,8 +115,8 @@ public class    Main {
 
     }
 
-    private static ArrayList<main.Car> getNotDoneCars(ArrayList<main.Car> car) {
-        ArrayList<main.Car> here = new ArrayList<>();
+    private static ArrayList<Car> getNotDoneCars(ArrayList<Car> car) {
+        ArrayList<Car> here = new ArrayList<>();
         for (Car car1:
                 car) {
             if(!car1.isFull()){
