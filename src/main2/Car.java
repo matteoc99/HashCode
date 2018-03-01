@@ -16,6 +16,7 @@ public class Car {
         location.y = 0;
         timer = 0;
         rides = new ArrayList<>();
+        full = false;
     }
 
 

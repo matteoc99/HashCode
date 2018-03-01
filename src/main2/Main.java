@@ -74,9 +74,7 @@ public class    Main {
             ArrayList<Car> notDoneCars= getNotDoneCars(car);
             Ride bestRide=null;
             Car bestCar=null;
-            gooo=false;
             for (Car car1: notDoneCars) {
-                gooo=true;
                 Ride localBestRide=null;
                 int localBesteZeit = Integer.MAX_VALUE;
                 ArrayList<Ride> free = getFreeRides();
@@ -86,15 +84,17 @@ public class    Main {
                     int waitTime = ride.start - (car1.getTimer()+leereFahrt) < 0 ? 0 : ride.start - (car1.getTimer()+leereFahrt) ;
                     int fahrtLength = ride.getFahrtTime();
                     int total = waitTime + fahrtLength + leereFahrt;
-                    if (total + car1.getTimer() < besteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
-                        bestRide = ride;
-                        besteZeit = total + car1.getTimer();
-                        bestCar = car1;
-                    }
+
                     //better then local?
                     if (total + car1.getTimer() < localBesteZeit && total + car1.getTimer() < T && total + car1.getTimer() < ride.finish) {
                         localBestRide = ride;
-                        besteZeit = total + car1.getTimer();
+                        localBesteZeit = total + car1.getTimer();
+                        if (total + car1.getTimer() < besteZeit) {
+                            bestRide = ride;
+                            besteZeit = total + car1.getTimer();
+                            bestCar = car1;
+                        }
+
                     }
                 }
                 if(localBestRide==null)
